@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
     try {
         await Cliente.create(cliente);
-        res.status(200);
+        res.status(200).json({});
     } catch(error) {
         res.status(500).json({error: error})
     }
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
     try{
         const cliente = await Cliente.findOne({_id: id});
         if(!cliente){
-            res.status(422).json({message: 'O usuário não foi encontrado!'});
+            res.status(422).json({});
             return;
         }
         res.status(200).json(cliente);               
@@ -46,7 +46,6 @@ router.get('/:id', async (req, res) => {
 })
 
 router.put('/:id', async(req, res) => {
-    const id = req.params.id;
     const {nome, sobreNome} = req.body;
     const cliente = {
         nome, 
@@ -54,7 +53,9 @@ router.put('/:id', async(req, res) => {
     };
 
     try {
+        await Cliente.updateOne(cliente);
         res.status(200).json(cliente);
+
     } catch(error) {
         res.status(500).json({error: error});
     }
@@ -62,10 +63,10 @@ router.put('/:id', async(req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
-
+   
     try {
         await Cliente.deleteOne({_id: id});
-        res.status(200);
+        res.status(200).json({});
     } catch(error) {
         res.status(500).json({error: error});
     }
